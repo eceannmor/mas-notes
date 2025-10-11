@@ -1,0 +1,428 @@
+\documentclass[1p,12pt,times,sort&compress]{elsarticle} 
+\usepackage[colorlinks]{hyperref} 
+\usepackage{enumitem}
+\hypersetup{
+    colorlinks=true,
+    urlcolor=blue,
+}
+\usepackage{tikz-uml}
+\usepackage{xcolor}
+\usepackage[normalem]{ulem}
+\usepackage{soul}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{framed}
+\usepackage[utf8]{inputenc}   
+\usepackage[T1]{fontenc}      
+\usepackage[english]{babel}   
+\usepackage{graphicx}         
+\usepackage{booktabs}         
+\usepackage{multirow}         
+\usepackage{float}            
+\usepackage{pdfpages}
+\usepackage{listings}
+\usepackage[explicit]{titlesec}
+
+\providecommand{\docref}[2]{\href{#1}{\texttt{\detokenize{#2}}}}
+\definecolor{shadecolor}{rgb}{0.95,0.95,0.95}
+\providecommand{\justpassing}[1]{
+    \begin{shaded}
+        \textit{TLDR for a \texttt{3}} \\[0.5em]
+        \setlength{\leftskip}{2cm}
+        #1
+        \setlength{\leftskip}{0cm}
+    \end{shaded}
+}
+\topmargin = -2cm
+\textheight = 23cm
+\oddsidemargin = -1.cm
+\textwidth = 18cm
+\linespread{1}
+\setlength{\parindent}{0cm}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\lstdefinestyle{sharpc}{
+    commentstyle=\color{codegreen},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize\ttfamily,
+    keywordstyle=\bfseries\color{magenta},
+    backgroundcolor=\color{gray!10!white},
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false, 
+    tabsize=2,
+    language=[Sharp]C,
+    frame=tb
+}
+\lstset{style=sharpc}
+\titleformat{\section}
+            {\large\bfseries}
+            {}
+            {0em}
+            {{#1}~\sout{\hfill}}
+
+\titleformat{\subsection}
+            {\normalfont\bfseries}
+            {}
+            {0em}
+            {{#1}~\sout{\hfill}}
+\raggedbottom
+
+%==========================================================
+\begin{document}
+{\Huge MAS Notes - The complete guide} \\
+Ekre Ceannmor and Co.
+\\[0.5em]
+See additional guidance \href{https://users.pja.edu.pl/~ewcislo/materials/mas/common/en/mp1/index.html}{here}.
+
+If anything is ambiguous, ask your teacher.
+
+%==========================================================
+\section*{Preface}
+This document is compiled from experiences of several students and teachers, past and current, and may not 100\
+
+Even though I cannot give you the exact answers to every problem MAS will throw at you, in writing this, I am attempting to make the subject more predictable and bearable.
+
+While you can read-as-you-go, it is greatly encouraged that you skim the whole document before the semester, to get the general feeling around the subject.
+\\[0.5em]
+I will be including shortcuts that you can take if you are only aiming to pass the subject with a \texttt{3}. They will be marked like this:
+
+\justpassing{Read the document before the semester and pay attention to what's marked as critical. Sometimes there are parts of the project that if done first make the rest easier, and they might not be the ones worth the most points.}
+
+Good luck!\\
+\textit{-Ekre}
+
+%==========================================================
+\section*{A separate note on AI use}
+
+Don't*
+\\[0.5em]
+{\small \textit{*You are a university teacher. Write a footnote about why you shouldn't use LLMs to write code for you.
+Make it convincing, dramatic, and full of examples of AI mistakes.
+Include a note warning people that AI code is an instant fail, plus a sentence suggesting harmless ways to use LLMs like brainstorming topics and ideas.
+Make it at least 50 words and be as condesending as possible.}}
+
+%==========================================================
+\section*{Subject outline}
+
+MAS is an artiaficially hard subject. Thus, it is quite unfair in its nature.
+
+One change from BYT that you will probably enjoy - no more unit tests!
+Not necessarily because you don't need them, unit tests are good in every situation, rather you will not have time to write them.
+Unit tests are not a requirement in any part of this subject, probably for the better.
+
+The subject consists of 3 parts:
+
+\begin{enumerate}[noitemsep]
+    \item Mini projects
+    \item Final project documentation
+    \item Final project implementation
+
+\end{enumerate}
+
+To proceed to the next part, one needs to pass (obtain at least 50\
+grade) the previous part. To pass the subject one needs to pass all individual parts.
+
+There are no exemptions from the exam.
+\\[0.5em]
+{\small\textit{Out of 8 groups (around 150 people) from summer 2024-2025 that I have access to, only one person has a 5 from the tutorials. It's possible to get a 5, but the structure of the subject is artiaficially hard and is actively working against you. -Ekre}}
+
+\subsection*{Mini-projects}
+
+You will have one (sometimes two, but expect one) week to create each final project. The deadline is usually set to midnight before the defence day, and before the defences you are presented with the next project.
+
+
+
+
+
+In case of every project, each task requirement has to have its own example object in the implementation.
+This means that you can only use a variable/method/class to showcase one requirement for the task.
+
+Here is an example related to MP1:
+
+\begin{lstlisting}
+// Bad implementation
+class Person {
+    // Example of a complex attribute as well as an optional attribute (too much)
+    private DateOnly? BirthDate;
+}
+
+// Good implementation
+class Worker {
+    // Example of a complex attribute
+    private DateOnly HiredDate;
+    // Example of an optional attribute
+    private DateOnly? FiredDate;
+}
+\end{lstlisting}
+
+If you use more than one example in a single variable/method/class, you will probably only get points for one of them, at the descression of the teacher.
+
+Note that in the second example, \texttt{FiredDate} can technically server as both \texttt{optional} and \texttt{complex}, but since \texttt{HiredDate} already handles the \texttt{complex} example, it does not constiture a mistake. 
+\\[0.5em]
+Remember: \textbf{You} are assigning the labels to each example. No matter how complex the examples are, as long as you are using only one label for each object, you will be fine. 
+
+\justpassing{
+Use the first 3 projects to get over the 50\
+in the PRI and BYT classes, which you have hopefully taken.
+Use the other 2 to catch up to a passing grade if you couldn't do it with the first 3.
+You should still pay attention on MP4 and MP5, as those topics will also be present in the final project.
+If you got over 50 points from the first 3, you may use this time to prepare for the final project.
+}
+
+%==========================================================
+\section*{MP1 - Classes and Attributes}
+This project is quite straightforward.
+
+Design a system (UML + implementation) that includes all of the following:
+\begin{itemize} [noitemsep]
+    \item \textbf{Attribute types}:\texttt{complex}, \texttt{multivalue}, \texttt{optional}, \texttt{class}, \texttt{derived}.
+    \item \textbf{Methods types}: \texttt{static}, \texttt{overload}, \texttt{override}.
+    \item Class extent and persistence for class extents.
+\end{itemize} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%==========================================================
+\subsection{Class extent}
+Check out Lecture 4 and the \texttt{ObjectPlus} class.
+
+To save some time in the future, look ahead into lectures 6 (\texttt{ObjectPlusPlus} class) and 8 (\texttt{ObjectPlus4} class).
+Implementing these classes early and using them as the base class for all future projects will save a lot of headache.
+You can download future leactures from the FTP server.
+\\[0.5em]
+Remember to secure the class extent by making it \texttt{private}.
+Objects should be automatically inserted into the extent by the constructor.
+
+You should have a method to retrieve the whole extent, and optionally to delete some / all objects from the extent.
+
+
+%==========================================================
+\subsection{Persistence}
+
+As of summer 24/25, only binary serialization is allowed. Keep this in mind, and verify with your teacher.
+
+Binary serialization saves the exact state of the object, but is deprecated in most languages.
+It is recommended to implement your own serialization functions.
+
+Remember that your serialization and desirialization have to happen in one call.
+
+\begin{lstlisting}
+// wrong
+MySerializer.Serialize(Person.GetExtent());
+MySerializer.Serialize(Job.GetExtent());
+
+// OK
+MySerializer.AddToQueue(Person.GetExtent());
+MySerializer.AddToQueue(Job.GetExtent());
+MySerializer.SerializeAll();
+\end{lstlisting}
+
+If you are unsure if your code is "one call", count the number of times the serialization file is opened.
+You should have:
+\begin{itemize} [noitemsep]
+    \item One file to serialize all data
+    \item One syscall to open the file for reading the data (deserialization at the start of the programme)
+    \item One syscall to open the file for writing the data (serialization at the end of the programme)
+\end{itemize}
+
+If unsure, hardcode the order of serialization. You do not have to overthink this part, as this is the only time when you will be using serialization.
+
+Next persistence project is MP5 - using a database, and the final project also requires a database. 
+
+%==========================================================
+\subsection{Attribute - complex}
+For \texttt{complex} attributes, find a build-in type in the language you use.
+A good example is date-time structs/classes.
+They are already present in most languages:
+
+\begin{itemize} [noitemsep]
+    \item \textbf{Java} - \docref{https://docs.oracle.com/javase/8/docs/api/java/util/Date.html}{java.util.Date}
+    \item \textbf{C\#} - \docref{https://learn.microsoft.com/en-us/dotnet/api/system.datetime}{System.DateTime}
+    \item \textbf{C++} - \docref{https://en.cppreference.com/w/cpp/chrono/time_point.html}{std::chrono::time_point}
+\end{itemize}
+
+Note that C\#'s \texttt{DateTime} is a \textit{value type}, since it is a struct. 
+Structs still count as complex attributes.
+
+%==========================================================
+\subsection{Attribute - multivalue}
+\texttt{multivalue} attributes \textit{must} be implemented as a collection.
+\textbf{Do not} create several attributes to represent multiple values.
+
+\begin{lstlisting}
+// wrong
+PhoneNumber? phone1;
+PhoneNumber? phone2;
+
+// correct
+PhoneNumber?[] phones = new PhoneNumber?[2];
+\end{lstlisting}
+
+Remember to implement proper validators, 
+the \texttt{multivalue} attribute has to have at least one value at all times if it is not \texttt{optional}.
+
+%==========================================================
+\subsection{Attribute - optional}
+For \texttt{optional} attributes, there's usually a built-in solution
+
+\begin{itemize} [noitemsep]
+    \item \textbf{Java} - \docref{https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html}{java.util.Optional}, or alternatively, leave the reference types as \texttt{null} (not recommended)
+    \item \textbf{C\#} - adding a question mark (\texttt{?}) after a type is a shorthand for \docref{https://learn.microsoft.com/en-us/dotnet/api/system.nullable}{System.Nullable<>}
+\begin{lstlisting}
+// these are equivalent
+int? a;
+Nullable<int> a;
+\end{lstlisting}
+    \item \textbf{C++} - \docref{https://en.cppreference.com/w/cpp/utility/optional.html}{std::optional}
+\end{itemize}
+
+%==========================================================
+\subsection{Attribute - class}
+Mark class attributes with a \texttt{static} keyword.
+
+Class attributes are useful for:
+\begin{itemize} [noitemsep]
+    \item Extents
+\begin{lstlisting}
+static List<Object> extent = [];
+\end{lstlisting}
+
+    \item Avoiding magic numbers
+\begin{lstlisting}
+static int MaxNameLength = 32;
+static double OvertimePayMultiplier = 1.5;
+\end{lstlisting}
+
+    \item Flags
+\begin{lstlisting}
+static bool EnableLogging = true;
+\end{lstlisting}  
+\end{itemize}
+
+Remember to implement proper setter validators or mark attributes as \texttt{const / readonly}.
+
+%==========================================================
+\subsection{Attribute - derived}
+A universal approach to derived attributes is a getter method.
+\begin{lstlisting}
+private DateOnly BirthDate;
+public int GetAge() {
+    return /* calculate age here */ ;
+}
+\end{lstlisting}
+
+C\# also allows for read-only properties
+\begin{lstlisting}
+private DateOnly BirthDate;
+public int Age {
+    get {
+        return /* calculate age here */ ;
+    }
+}
+\end{lstlisting}
+
+The value of derived attributes should \textit{never} be stored, 
+rather it should be calculated on the fly for each get call.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%==========================================================
+\subsection{Method - static}
+The easiest way to implement a static method is to operate on the extent. 
+
+E.g.:
+\begin{lstlisting}
+public static List<Object> GetExtent() {/**/};
+public static int GetExtentLength() {/**/};
+public static void PrintExtent() {/**/};
+public static void ClearExtent() {/**/};
+\end{lstlisting}
+
+%==========================================================
+\subsection{Method - overload}
+Overload methods by creating multiple methods with the same name but different signatures.
+
+Remember that methods that only differ in return types will not compile.
+
+\begin{lstlisting}
+// this is a good example of overloading
+public int GetTotalPrice(Order order) {/**/}
+public double GetTotalPrice(Order order, double discount) {/**/}
+
+// this will not compile
+public int GetTotalPrice(Order order) {/**/}
+public double GetTotalPrice(Order order) {/**/}
+\end{lstlisting}
+
+%==========================================================
+\subsection{Method - override}
+For Java and C\#, use a custom \texttt{ToString()} method.
+If your teacher does not accept \texttt{ToString()} methods, 
+or you use C++, you will need a basic inheritance example.
+
+%==========================================================
+\section*{MP2 - Associations}
+
+%==========================================================
+\section*{MP3 - Inheritance}
+
+%==========================================================
+\section*{MP4 - Constraints}
+
+%==========================================================
+\section*{MP5 - Relational Model}
+
+%==========================================================
+\section*{Final Project Documentation}
+
+%==========================================================
+\section*{Final Project Implementation}
+
+%==========================================================
+\section*{Exam}
+
+\end{document}
