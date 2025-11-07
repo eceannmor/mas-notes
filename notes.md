@@ -161,36 +161,12 @@ You may benefit down the line from creating a class similar to `ObjectPlus`, as 
 
 ### MP2
 
-**Associations** - 20 point total
-
-#### Task outline
-
-Design a system (UML + implementation) that includes all of the following:
-
-- Association types: basic, qualified, composition, with attribute. (aggrega
-  tion and reflex might not be required, check in with your teacher.)
-- Reverse connections are mandatory for every association. Make sure you have at
-  least some tests for this, infinite loops are the most common issue.
-  Do not use one-to-one associations like these:
-
 Even though these associations are perfectly correct, the teacher will not be happy to see
 them. They are considered basic and uninteresting.
 Also, unless specifically asked to, avoid using either one of these:
 
 They are hard to implement and would require additional constructors / factory methods
 for creating pairs of objects.
-qualified associations should not be implemented using IDs (in general, avoid IDs where
-possible, with the exception for database PKs). Here are some good options to use instead:
-
-- company names,
-- phone numbers,
-- role name,
-- location names,
-- addresses,
-- product codes,
-- datetime(now),
-- any other unique string attribute, or
-- a unique combination of two or more attributes.
 
 ### MP3
 
