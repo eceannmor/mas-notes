@@ -430,9 +430,9 @@ Since both \texttt{C} and \texttt{D} require the other one to exist, their const
 }
 \end{lstlisting}
 
-Note that this factory accesses a bad constructor for \texttt{C} - the one with no arguments. 
-This constructor should be private and accessible only to factory methods. 
-This implementation adds complexity and is not recommended. 
+Note that this factory accesses a bad constructor for \texttt{C} - the one with no arguments.
+This constructor should be private and accessible only to factory methods.
+This implementation adds complexity and is not recommended.
 
 \addcontentsline{toc}{subsection}{Association - qualified}
 \subsection*{Association - qualified}
@@ -450,35 +450,310 @@ possible, with the exception for database PKs). Here are some good options to us
     \item any other \textit{unique} string attribute, or
     \item a \textit{unique} combination of two or more attributes.
 \end{itemize}
-    
+
 \addcontentsline{toc}{subsection}{Association - composition}
 \subsection*{Association - composition}
+
+Composition associations involve 2 object, with one being dependent on the other.
+
+For example, an article on a blog website consists of paragraphs, but an individual paragraph cannot be published (exist on its own) without being in an article.
+In this relationship, we can label the article object as a "parent" and the paragraph object as a child.
+
+When implementing composition pay attention to these cases:
+\begin{itemize}
+    \item The child object must have a reference to the parent object, and this reference must never be \texttt{null}.
+          To enforce this, the child object should take a parent object as one of the inputs in its constructor.
+    \item If a parent object removes the reference to a child object, the child should be deleted. This is an important part in implementing reverse connections.
+\end{itemize}
+
+\begin{lstlisting}
+class Article {
+    List<Paragraph> paragraphs;
+
+    removeParagraph(Paragraph p) {
+        paragraph.Remove(p);
+        p.Delete();  // remember to delete the child object
+    }
+}
+
+class Paragraph {
+    Article parent;
+
+    Paragraph(Article parent, ...) {
+        this.parent = parent;   // this must never be null
+        ...
+    }
+}
+\end{lstlisting}
+
+Whether the child object can be reassigned a parent (moved from one parent to another) is up to your use case and implementation.
+
+
 
 \addcontentsline{toc}{subsection}{Association - with attribute}
 \subsection*{Association - with attribute}
 
+Association with an attribute is usually implemented using an association class/struct.
+These types of associations are mostly used in cases when extra information needs to be stored about the association itself, which does not directly correlate with either of the objects forming the association.
 
+Consider a relationship between a worker and a company.
+A worker might work for many different companies, and a company might have many employees.
+
+Each company stores the historical data of all employees, when they joined, and when they quit.
+
+Which class do we store the employee's join date for a particular company?
+
+\begin{lstlisting}
+class Employee {
+    List<Employee_Company> companies;
+}
+
+class Employee_Company {
+    Employee e;
+    Company c;
+    Date joined;
+    Date? fired;
+    ...
+}
+
+class Company {
+    List<Employee_Company> employees;
+}
+\end{lstlisting}
+
+The association class \texttt{Employee\_Company} can store an arbitrary amount of data for a relationship between a specific employee and a specific company.
+
+Things to look out for:
+\begin{itemize}
+    \item The association class must alwayas have 2 valid references (pass them through a constructor).
+    \item If an object gets deleted, all association classes must be deleted as well, after they are unlinked from both sides. \\
+          I.e.:
+          \begin{enumerate}
+              \item A \texttt{Company} object receives a delete request,
+              \item All associated \texttt{Employee\_Company} objects are notified that the \texttt{Company} is getting deleted,
+              \item \texttt{Employee\_Company} objects unlink themselves from \texttt{Employee} objects,
+              \item \texttt{Employee\_Company} objects delete themselves and send the confirmation back to \texttt{Company},
+              \item The \texttt{Company} object deletes itself.
+          \end{enumerate}
+    \item Make sure that the data stored in the association class actually related to the association, and cannot be tied to one of the obejcts.
+\end{itemize}
 
 %==========================================================
 \addcontentsline{toc}{section}{MP3 - Inheritance}
 \section*{MP3 - Inheritance}
+
+Design a system (UML + implementation) that includes all of the following:
+
+\begin{itemize} [noitemsep]
+    \item \textbf{Inheritance types}: \texttt{abstract}, \texttt{disjoint}, \texttt{overlapping}, \texttt{dynamic}, \texttt{multi-inheritance}, \texttt{multi-aspect}
+    \item \textbf{Analytical diagram}: Showcasing the \textbf{initial design} without limitations of programming.
+    \item \textbf{Design diagram}: Showcasing the \textbf{actual implementation} taking into account the limitation of the language.
+\end{itemize}
+
+% - **Inheritance types**: `abstract`, `disjoint`, `overlapping`, `dynamic`,
+%   `multi-inheritance`, `multi-aspect`.
+%   Do not combine inheritance types for this project (e.g. `{overlapping, dynamic}`). It
+%   will complicate the implementation and the defense. It's easier to implement an extra
+%   class than a combined inheritance type. If needed, design several smaller systems (ask
+%   your teacher if they think it would be better).
+% - **Analytical diagram**: Showcasing the **initial design** using UML.
+% - **Design diagram**: Showcasing the **actual implementation** as it is in code.
+
+\addcontentsline{toc}{subsection}{Inheritance - abstract}
+\subsection*{Inheritance - abstract}
+
+\addcontentsline{toc}{subsection}{Inheritance - disjoint}
+\subsection*{Inheritance - disjoint}
+
+\addcontentsline{toc}{subsection}{Inheritance - overlapping}
+\subsection*{Inheritance - overlapping}
+
+\addcontentsline{toc}{subsection}{Inheritance - dynamic}
+\subsection*{Inheritance - dynamic}
+
+\addcontentsline{toc}{subsection}{Inheritance - multi-inheritance}
+\subsection*{Inheritance - multi-inheritance}
+
+\addcontentsline{toc}{subsection}{Inheritance - multi-aspect}
+\subsection*{Inheritance - multi-aspect}
+
+\addcontentsline{toc}{subsection}{Analytical diagram}
+\subsection*{Analytical diagram}
+
+\addcontentsline{toc}{subsection}{Design diagram}
+\subsection*{Design diagram}
 
 
 %==========================================================
 \addcontentsline{toc}{section}{MP4 - Constraints}
 \section*{MP4 - Constraints}
 
+Design a system (UML + implementation) that includes all of the following:
+
+\begin{itemize} [noitemsep]
+    \item \textbf{Attribute Constraints}: \texttt{static}, \texttt{dynamic}, \texttt{unique}
+    \item \textbf{Universal Constraints}: \texttt{subset}, \texttt{ordered}, \texttt{bag/history}, \texttt{XOR}, \texttt{business logic}
+    \item \textbf{Validators}: All constrains must be enforced with validators.
+\end{itemize}
+
+\addcontentsline{toc}{subsection}{Attribute Constraint - static}
+\subsection*{Attribute Constraint - static}
+
+\addcontentsline{toc}{subsection}{Attribute Constraint - dynamic}
+\subsection*{Attribute Constraint - dynamic}
+
+\addcontentsline{toc}{subsection}{Attribute Constraint - unique}
+\subsection*{Attribute Constraint - unique}
+
+\addcontentsline{toc}{subsection}{Universal Constraint - subset}
+\subsection*{Universal Constraint - subset}
+
+\addcontentsline{toc}{subsection}{Universal Constraint - ordered}
+\subsection*{Universal Constraint - ordered}
+
+\addcontentsline{toc}{subsection}{Universal Constraint - bag/history}
+\subsection*{Universal Constraint - bag/history}
+
+\addcontentsline{toc}{subsection}{Universal Constraint - XOR}
+\subsection*{Universal Constraint - XOR}
+
+\addcontentsline{toc}{subsection}{Universal Constraint - business logic}
+\subsection*{Universal Constraint - business logic}
+
+\addcontentsline{toc}{subsection}{Validators}
+\subsection*{Validators}
+
+
+% - ****:
+% - `static` - any type of constraint that is applied regardless if the attribute is being
+% assigned for the first time or changed.
+% - `dynamic` - any type of constraint that change depending on the value of the attribute.
+% They only work on the update. For example:
+% - Cannot increase / decrease value
+% - Cannot change value more than X times per Y time
+% - Value must change at least X times per Ys time
+% - `unique` - self-explanatory, technically a static constrain. Use this constraint on some-
+% thing other than the ID. This will get you extra points (or prevent you from losing
+% some).
+% - **Universal Constraints**:
+% - `subset` - only applies if there are 2 or more associations between 2 classes. One associ-
+% ation is the "main" association (superset), the other one(s) are the "dependent"
+% associations (subset). The subset association can only exist if the superset as-
+% sociation that links the same objects exists.
+% Here is a StackOverflow question describing the subset association.
+% https://stackoverflow.com/questions/70655850/what-does-subsets-mean-in-uml-exactly
+% - `ordered` - basic constraint that is applied to a class / association / list attribute.
+% States that the contents must be always sorted.
+% - `bag` / `history` - allows duplicate associations between the two classes using an ex-
+% tra association table (association class / association by attribute). I.e. stores a
+% list of associations based on some identifier (usually date when the association
+% was created / expired). If the association is not a bag / history, the previous
+% association needs to be deleted if the new one gets added.
+% - `XOR` - states that for the given 2 associations A1 and A2, either A1 **OR** A2 must exist,
+% but **not both** and **not neither**.
+% - "business logic" - not a real thing but some teachers ask to implement it. Business
+% logic is whatever makes sense as constraint in your system. Write some custom
+% validator and package it in a constraint.
+% For example: "This string can be null, but if it is not null, it must be strictly
+% longer than 9 characters" (like an optional phone number).
+% - **Validators**:
+% All constrains must be enforced with validators. If your teacher does not specify how
+% to implement them, the choice is up to you. Common validators are annotations and
+% if statements, do not overcomplicate the system if you don't have to
+
 %==========================================================
 \addcontentsline{toc}{section}{MP5 - Relational Model}
 \section*{MP5 - Relational Model}
+
+Connect the system to a database, in whatever method you see fit. The details are defined
+by the teacher.
+
+For a skeleton project - make a simple ORM example with a database. This will save you
+time once you need to implement it for a proper system.
 
 %==========================================================
 \addcontentsline{toc}{section}{Final Project Documentation}
 \section*{Final Project Documentation}
 
+The final project is split into two deadlines: the documentation and the implementation.
+To defend the implementation, you must first pass the documentation. This section describes it.
+
+You can re-take both the documentation and implementation once each, usually before the implementation defence and before the 2nd-term exam respectively.
+
+A good rule of thumb for the size of the project is at least 80\% of the combined features of all mini-projects, or about as big as your final BYT project (if you have taken BYT previously).
+
+As of writing this, some people note that this has now changed to somewhere around 50\% of the combined mini-projects, ask your teacher if you are not sure.
+
+Grades are given based on the complexity of the system (not the real world complexity, but
+rather the amount of stuff from mini projects that you can cram into it).
+Try to implement as many different features without making the system complex to understand.
+
+Approximate grading system for this part (for a total of 100 points):
+
+\begin{itemize} [noitemsep]
+    \item Complexity of the business domain - 10 points
+    \item Documenting the use cases (use case scenario, use case diagram) - 10 points
+    \item Correctness and complexity of the design class diagram - 35 points
+    \item Correctness and complexity of the activity diagram - 10 points
+    \item Correctness and complexity of the state diagram - 10 points
+    \item GUI design - 10 points
+    \item Discussion of the design decisions (dynamic analysis) - 10 points
+    \item Readability and the organization of the document - 5 points
+\end{itemize}
+
+I cannot emphasize enough how important it is to have most of the stuff correct on the
+first defense. If the teacher notices a lot of errors they might (allegedly) skip checking the
+rest, give you feedback on the stuff that they checked, and send you for the next week's
+defense. The problem arises when you realize that there are more errors that the teacher
+hasn't checked and hasn't given feedback on. This means that you might be presenting a
+faulty system for your last chance at a defense. Make sure that your system does not have
+enough missing part to make the teacher "give up" on you during the first defense.
+
+For the UI design, choose use cases that either:
+\begin{enumerate} [noitemsep]
+    \item creates an object based on already existing objects, e.g.:
+          add a new appointment for the patient and the doctor, OR
+    \item uses object referenced between already existing objects, e.g.:
+          assign a product to a cart.
+\end{enumerate}
+Avoid use cases that just retrieve information, they are considered too primitive. Use cases
+should also demonstrate reverse connections as much as possible.
+
 %==========================================================
 \addcontentsline{toc}{section}{Final Project Implementation}
 \section*{Final Project Implementation}
+
+\addcontentsline{toc}{subsection}{Write comments}
+\subsection*{Write comments}
+
+This section exists just to beg you to write comments.
+\begin{itemize} [noitemsep]
+    \item They contribute to your final grade
+    \item They made you remember what you wrote better, which is a huge lifesaver at the defence
+    \item They make your code look more refined and professional
+    \item They help with back pain for ages 50 and above (not licensed by the FDA)
+\end{itemize}
+
+Especially if you are re-taking the implementation of the final project at the end of the summer, use the extra time you have to write comments.
+
+\addcontentsline{toc}{subsection}{Database operations}
+\subsection*{Database operations}
+
+Teachers pay attention to the amount of database operations/connections that are used to retrieve the data.
+
+In the GUI example, the "list within a list" should consist of \textbf{O(1)} database operations.
+I.e. retrieving a list of all parent objects and all children objects should not be dependent on the number of objects.
+
+Your call to the database should look something like this (pseudo-sql):
+\begin{enumerate} [noitemsep]
+    \item \texttt{SELECT * FROM parent, children, WHERE children.parentid = parent.id}, or
+    \item \texttt{WITH x AS (SELECT * FROM parent);} \\ \texttt{SELECT * FROM children WHERE children.id IN x;}
+\end{enumerate}
+    
+The goal is to retrieve all objects using one or two calls.
+If the child objects are only retrieved during the loading of "list within a list" and not the top-level list, \textbf{it is the wrong way to implement it}.
+
+Once the top-level list loads, both parent and child objects should be loaded into memory. When entering a "list within a list", \textbf{no extra queries should be made}.
 
 %==========================================================
 \addcontentsline{toc}{section}{Exam}

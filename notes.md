@@ -357,7 +357,7 @@ Your lecturer should have published a sample exam for you. If they didn't, a sam
 
 The exam consists of a theoretical part (based on the lecture materials ONLY), and a practical part, which is a mix of lecture knowledge and your personal coding experience throughout the semester.
 
-We will skip explaining the first part, aside from the fact that sometimes the correct answer is not what the world aggrees on, but rather what is written in the lectures. If a phrase seems very specific and/or vague, `Ctrl+F` it in the lectures.
+We will skip explaining the first part, aside from the fact that sometimes the correct answer is not what the world agrees on, but rather what is written in the lectures. If a phrase seems very specific and/or vague, `Ctrl+F` it in the lectures.
 
 As of 2025, no extra paper is allowed on the exam.
 The space you get on the second page is all that is available to you to complete the task.
