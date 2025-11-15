@@ -1,45 +1,50 @@
 \documentclass[1p,12pt,times,sort&compress]{elsarticle} 
+
+% Hyperlinks
 \usepackage[colorlinks]{hyperref} 
-\usepackage{enumitem}
 \hypersetup{
     colorlinks=true,
     urlcolor=blue,
 }
-\usepackage{xcolor}
-\usepackage[normalem]{ulem}
-\usepackage{soul}
+
+% Force english
+\usepackage[english]{babel}   
+
+% Encoding
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+
+% Colours
+\usepackage{xcolor}
+
+% Layout control for itemize and enumerate
+\usepackage{enumitem}
+
+% Underlines
+\usepackage[normalem]{ulem}
+
+% Framed/shaded regions
 \usepackage{framed}
-\usepackage[english]{babel}   
+\definecolor{shadecolor}{rgb}{0.95,0.95,0.95}
 
 % Images and figures
 \usepackage{graphicx}
 \graphicspath{ {./images/} }  
 
+% Better tables
 \usepackage{booktabs}         
-\usepackage{multirow}         
-\usepackage{float}            
-\usepackage{pdfpages}
-\usepackage{listings}
-\usepackage[explicit]{titlesec}
 
-\providecommand{\docref}[2]{\href{#1}{\texttt{\detokenize{#2}}}}
-\definecolor{shadecolor}{rgb}{0.95,0.95,0.95}
-\providecommand{\justpassing}[1]{
-    \begin{shaded}
-        \textit{TLDR for a \texttt{3}} \\[0.5em]
-        \setlength{\leftskip}{2cm}
-        #1
-        \setlength{\leftskip}{0cm}
-    \end{shaded}
-}
-\topmargin = -2cm
-\textheight = 23cm
-\oddsidemargin = -1.cm
-\textwidth = 18cm
-\linespread{1}
-\setlength{\parindent}{0cm}
+% Multirow table cells
+\usepackage{multirow} 
+
+% [H] modifier
+\usepackage{float}  
+
+% Inserting other pdfs as pages
+\usepackage{pdfpages}
+
+% Code blocks
+\usepackage{listings}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -63,17 +68,32 @@
     frame=tb
 }
 \lstset{style=sharpc}
-\titleformat{\section}
-            {\large\bfseries}
-            {}
-            {0em}
-            {{#1}~\sout{\hfill}}
 
-\titleformat{\subsection}
-            {\normalfont\bfseries}
-            {}
-            {0em}
-            {{#1}~\sout{\hfill}}
+% Custom section headings
+\usepackage[explicit]{titlesec}
+\titleformat{\section}{\large\bfseries}{}{0em}{{#1}~\sout{\hfill}}
+\titleformat{\subsection}{\normalfont\bfseries}{}{0em}{{#1}~\sout{\hfill}}
+
+% Links referencing the language docs
+\providecommand{\docref}[2]{\href{#1}{\texttt{\detokenize{#2}}}}
+
+% "TLDR for a 3" section
+\providecommand{\justpassing}[1]{
+    \begin{shaded}
+        \textit{TLDR for a \texttt{3}} \\[0.5em]
+        \setlength{\leftskip}{2cm}
+        #1
+        \setlength{\leftskip}{0cm}
+    \end{shaded}
+}
+
+% Geometry
+\topmargin = -2cm
+\textheight = 23cm
+\oddsidemargin = -1.cm
+\textwidth = 18cm
+\linespread{1}
+\setlength{\parindent}{0cm}
 \raggedbottom
 
 %==========================================================
@@ -749,7 +769,7 @@ Your call to the database should look something like this (pseudo-sql):
     \item \texttt{SELECT * FROM parent, children, WHERE children.parentid = parent.id}, or
     \item \texttt{WITH x AS (SELECT * FROM parent);} \\ \texttt{SELECT * FROM children WHERE children.id IN x;}
 \end{enumerate}
-    
+
 The goal is to retrieve all objects using one or two calls.
 If the child objects are only retrieved during the loading of "list within a list" and not the top-level list, \textbf{it is the wrong way to implement it}.
 
